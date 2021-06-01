@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  db:
+    image: mysql
+    volumes:
+      - db_data:/var/lib/mysql
+    env_file:
+      - ".env"
+  app:
+    build: .
+    stdin_open: true
+    tty: true
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+      - "/app/assets/node_modules"
+      - "/app/deps"
+    env_file:
+      - ".env"
+    command: mix phx.server
+    depends_on:
+      - db
+volumes:
+  db_data: {}
