@@ -6,7 +6,6 @@
     <nav class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row">
       <%= link "Home", to: Routes.page_path(@conn, :index), class: "bg-transparent focus:bg-gray-200 focus:outline-none focus:shadow-outline focus:text-gray-900 font-semibold hover:bg-gray-200 hover:text-gray-900 md:ml-4 md:mt-0 mt-2 px-4 py-2 rounded-lg text-sm" %>
       <%= if @current_user do %>
-        <div class="bg-transparent focus:outline-none font-semibold md:ml-4 md:mt-0 mt-2 px-4 py-2 rounded-lg text-sm"><%= @current_user.email %></div>
         <%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete, class: "bg-transparent focus:bg-gray-200 focus:outline-none focus:shadow-outline focus:text-gray-900 font-semibold hover:bg-gray-200 hover:text-gray-900 md:ml-4 md:mt-0 mt-2 px-4 py-2 rounded-lg text-sm" %>
       <% else %>
         <%= link "Register", to: Routes.user_registration_path(@conn, :new), class: "bg-transparent focus:bg-gray-200 focus:outline-none focus:shadow-outline focus:text-gray-900 font-semibold hover:bg-gray-200 hover:text-gray-900 md:ml-4 md:mt-0 mt-2 px-4 py-2 rounded-lg text-sm" %>

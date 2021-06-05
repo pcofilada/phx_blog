@@ -4,6 +4,8 @@ defmodule PhxBlog.Accounts.User do
 
   @derive {Inspect, except: [:password]}
   schema "users" do
+    field :first_name, :string
+    field :last_name, :string
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string
@@ -31,15 +33,27 @@ defmodule PhxBlog.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:first_name, :last_name, :email, :password])
+    |> validate_first_name()
+    |> validate_last_name()
     |> validate_email()
     |> validate_password(opts)
   end
 
+  defp validate_first_name(changeset) do
+    changeset
+    |> validate_required([:first_name], message: "First name can't be blank")
+  end
+
+  defp validate_last_name(changeset) do
+    changeset
+    |> validate_required([:last_name], message: "Email can't be blank")
+  end
+
   defp validate_email(changeset) do
     changeset
-    |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
+    |> validate_required([:email], message: "Email can't be blank")
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "Email must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
     |> unsafe_validate_unique(:email, PhxBlog.Repo)
     |> unique_constraint(:email)
@@ -47,8 +61,8 @@ defmodule PhxBlog.Accounts.User do
 
   defp validate_password(changeset, opts) do
     changeset
-    |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 80)
+    |> validate_required([:password], message: "Password can't be blank")
+    |> validate_length(:password, min: 12, message: "Password should be at least 12 character(s)")
     # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
     # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
