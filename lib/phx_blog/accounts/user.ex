@@ -55,7 +55,7 @@ defmodule PhxBlog.Accounts.User do
     |> validate_required([:email], message: "Email can't be blank")
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "Email must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
-    |> unsafe_validate_unique(:email, PhxBlog.Repo)
+    |> unsafe_validate_unique(:email, PhxBlog.Repo, message: "Email has already been taken")
     |> unique_constraint(:email)
   end
 

@@ -1,5 +1,18 @@
 <main role="main" class="w-full">
-  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-  <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+  <%= if get_flash(@conn, :info) do %>
+    <div class="bg-green-200 px-3 py-1.5" role="alert">
+      <div class="lg:px-12 max-w-screen-xl md:px-8 mx-auto px-6">
+        <%= get_flash(@conn, :info) %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= if get_flash(@conn, :error) do %>
+    <div class="bg-green-200 px-3 py-1.5" role="alert">
+      <div class="lg:px-12 max-w-screen-xl md:px-8 mx-auto px-6">
+        <%= get_flash(@conn, :error) %>
+      </div>
+    </div>
+  <% end %>
   <%= @inner_content %>
 </main>
