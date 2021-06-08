@@ -16,6 +16,6 @@
   </div>
   <div>
     <%= submit "Save", class: "bg-green-500 hover:bg-green-600 px-3 py-2 rounded text-center text-sm text-white w-24" %>
-    <%= link "Cancel", to: Routes.post_path(@conn, :index), class: "bg-red-500 hover:bg-red-600 inline-block px-3 py-2 rounded text-center text-sm text-white w-24" %>
+    <%= link "Cancel", to: Routes.dashboard_post_path(@conn, :index), class: "bg-red-500 hover:bg-red-600 inline-block px-3 py-2 rounded text-center text-sm text-white w-24" %>
   </div>
 <% end %>

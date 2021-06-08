@@ -40,7 +40,7 @@ defmodule PhxBlog.Blog do
   """
   def get_user_post!(user_id, slug) do
     Post
-    |> Repo.get_by!(user_id: user_id, slug: slug,)
+    |> Repo.get_by!(user_id: user_id, slug: slug)
   end
 
   @doc """
@@ -93,6 +93,42 @@ defmodule PhxBlog.Blog do
   """
   def delete_post(%Post{} = post) do
     Repo.delete(post)
+  end
+
+  @doc """
+  Returns the list of posts.
+
+  ## Examples
+
+      iex> list_posts()
+      [%Post{}, ...]
+
+  """
+  def list_posts do
+    Post
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+    |> Repo.preload(:user)
+  end
+
+@doc """
+  Gets a single post.
+
+  Raises `Ecto.NoResultsError` if the Post does not exist.
+
+  ## Examples
+
+      iex> get_post!(123)
+      %Post{}
+
+      iex> get_post!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_post!(slug) do
+    Post
+    |> Repo.get_by!(slug: slug)
+    |> Repo.preload(:user)
   end
 
   @doc """

@@ -1,5 +1,5 @@
-<div class="mx-auto pt-5 w-2/4">
+<div class="border w-2/4 mx-auto border-gray-400 rounded-lg md:p-4 bg-white sm:py-3 py-4 px-2 m-10">
   <h1 class="text-2xl">New Post</h1>
 
-  <%= render "form.html", Map.put(assigns, :action, Routes.post_path(@conn, :create)) %>
+  <%= render "form.html", Map.put(assigns, :action, Routes.dashboard_post_path(@conn, :create)) %>
 </div>

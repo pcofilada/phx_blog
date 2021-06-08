@@ -1,5 +1,5 @@
 <div class="mx-auto pt-5 text-right w-2/4">
-  <%= link "New Post", to: Routes.post_path(@conn, :new), class: "bg-green-500 hover:bg-green-600 inline-block mr-1.5 px-3 py-2 rounded text-center text-sm text-white w-24" %>
+  <%= link "New Post", to: Routes.dashboard_post_path(@conn, :new), class: "bg-green-500 hover:bg-green-600 inline-block mr-1.5 px-3 py-2 rounded text-center text-sm text-white w-24" %>
 </div>
 
 <%= for post <- @posts do %>
@@ -44,8 +44,8 @@
                   </div>
                 </div>
                 <div class="flex items-center">
-                  <%= link "Edit", to: Routes.post_path(@conn, :edit, post), class: "bg-blue-500 hover:bg-blue-600 mr-1.5 px-3 py-2 rounded text-center text-sm text-white w-24" %>
-                  <%= link "Delete", to: Routes.post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "bg-red-500 hover:bg-red-600 mr-1.5 px-3 py-2 rounded text-center text-sm text-white w-24" %>
+                  <%= link "Edit", to: Routes.dashboard_post_path(@conn, :edit, post), class: "bg-blue-500 hover:bg-blue-600 mr-1.5 px-3 py-2 rounded text-center text-sm text-white w-24" %>
+                  <%= link "Delete", to: Routes.dashboard_post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "bg-red-500 hover:bg-red-600 mr-1.5 px-3 py-2 rounded text-center text-sm text-white w-24" %>
                 </div>
             </div>
           </div>

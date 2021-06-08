@@ -20,13 +20,14 @@ defmodule PhxBlogWeb.Router do
   scope "/", PhxBlogWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    get "/", PostController, :index
+    get "/posts/:id", PostController, :show
   end
 
-  scope "/dashboard", PhxBlogWeb do
+  scope "/dashboard", PhxBlogWeb.Dashboard, as: :dashboard do
     pipe_through [:browser, :require_authenticated_user]
 
-    resources("/posts", Dashboard.PostController)
+    resources "/posts", PostController, except: [:show]
   end
 
   # Other scopes may use custom stacks.
