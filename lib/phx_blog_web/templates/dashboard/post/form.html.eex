@@ -1,0 +1,21 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="bg-red-200 my-4 px-3 py-1.5 rounded-md">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+  <div class="mb-5">
+    <%= label f, :title, class: "font-semibold text-sm text-gray-600 pb-1 block" %>
+    <%= text_input f, :title, class: "border rounded-lg px-3 py-2 mt-1 text-sm w-full" %>
+    <%= error_tag f, :title %>
+  </div>
+  <div class="mb-5">
+    <%= label f, :body, class: "font-semibold text-sm text-gray-600 pb-1 block" %>
+    <%= textarea f, :body, class: "border h-48 mt-1 px-3 py-2 rounded-lg text-sm w-full" %>
+    <%= error_tag f, :body %>
+  </div>
+  <div>
+    <%= submit "Save", class: "bg-green-500 hover:bg-green-600 px-3 py-2 rounded text-center text-sm text-white w-24" %>
+    <%= link "Cancel", to: Routes.post_path(@conn, :index), class: "bg-red-500 hover:bg-red-600 inline-block px-3 py-2 rounded text-center text-sm text-white w-24" %>
+  </div>
+<% end %>

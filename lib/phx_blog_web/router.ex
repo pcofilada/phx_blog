@@ -23,6 +23,12 @@ defmodule PhxBlogWeb.Router do
     live "/", PageLive, :index
   end
 
+  scope "/dashboard", PhxBlogWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    resources("/posts", Dashboard.PostController)
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PhxBlogWeb do
   #   pipe_through :api
