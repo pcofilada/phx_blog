@@ -3,6 +3,7 @@ defmodule PhxBlog.Accounts.User do
   import Ecto.Changeset
 
   alias PhxBlog.Blog.Post
+  alias PhxBlog.Blog.Comment
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -14,6 +15,7 @@ defmodule PhxBlog.Accounts.User do
     field :confirmed_at, :naive_datetime
 
     has_many :posts, Post
+    has_many :comments, Comment
 
     timestamps()
   end

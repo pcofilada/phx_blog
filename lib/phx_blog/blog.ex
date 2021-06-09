@@ -22,7 +22,7 @@ defmodule PhxBlog.Blog do
     |> where(user_id: ^user_id)
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload(:user)
+    |> Repo.preload([:user, :comments])
   end
 
   @doc """
@@ -108,7 +108,7 @@ defmodule PhxBlog.Blog do
     Post
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload(:user)
+    |> Repo.preload([:user, :comments])
   end
 
 @doc """
@@ -128,7 +128,8 @@ defmodule PhxBlog.Blog do
   def get_post!(slug) do
     Post
     |> Repo.get_by!(slug: slug)
-    |> Repo.preload(:user)
+    |> Repo.preload([:user])
+    |> Repo.preload([comments: :user])
   end
 
   @doc """
@@ -142,5 +143,38 @@ defmodule PhxBlog.Blog do
   """
   def change_post(%Post{} = post, attrs \\ %{}) do
     Post.changeset(post, attrs)
+  end
+
+  alias PhxBlog.Blog.Comment
+
+  @doc """
+  Creates a comment.
+
+  ## Examples
+
+      iex> create_comment(%{field: value})
+      {:ok, %Comment{}}
+
+      iex> create_comment(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_comment(attrs \\ %{}) do
+    %Comment{}
+    |> Comment.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking comment changes.
+
+  ## Examples
+
+      iex> change_comment(comment)
+      %Ecto.Changeset{data: %Comment{}}
+
+  """
+  def change_comment(%Comment{} = comment, attrs \\ %{}) do
+    Comment.changeset(comment, attrs)
   end
 end

@@ -3,6 +3,7 @@ defmodule PhxBlogWeb.PostController do
 
   alias PhxBlog.Blog
   alias PhxBlog.Blog.Post
+  alias PhxBlog.Blog.Comment
 
   def index(conn, _params) do
     posts = Blog.list_posts()
@@ -11,6 +12,7 @@ defmodule PhxBlogWeb.PostController do
 
   def show(conn, %{"id" => id}) do
     post = Blog.get_post!(id)
-    render(conn, "show.html", post: post)
+    comment_changeset = Blog.change_comment(%Comment{})
+    render(conn, "show.html", post: post, comment_changeset: comment_changeset)
   end
 end

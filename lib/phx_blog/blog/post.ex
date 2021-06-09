@@ -3,6 +3,7 @@ defmodule PhxBlog.Blog.Post do
   import Ecto.Changeset
 
   alias PhxBlog.Accounts.User
+  alias PhxBlog.Blog.Comment
 
   @derive {Phoenix.Param, key: :slug}
   schema "posts" do
@@ -11,6 +12,8 @@ defmodule PhxBlog.Blog.Post do
     field :title, :string
 
     belongs_to :user, User
+
+    has_many :comments, Comment
 
     timestamps()
   end
