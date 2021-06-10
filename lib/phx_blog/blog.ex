@@ -8,6 +8,12 @@ defmodule PhxBlog.Blog do
 
   alias PhxBlog.Blog.Post
 
+  @topic inspect(__MODULE__)
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(PhxBlog.PubSub, @topic)
+  end
+
   @doc """
   Returns the list of created posts by a user.
 
@@ -163,6 +169,7 @@ defmodule PhxBlog.Blog do
     %Comment{}
     |> Comment.changeset(attrs)
     |> Repo.insert()
+    |> broadcast_change([:comment, :created])
   end
 
   @doc """
@@ -176,5 +183,11 @@ defmodule PhxBlog.Blog do
   """
   def change_comment(%Comment{} = comment, attrs \\ %{}) do
     Comment.changeset(comment, attrs)
+  end
+
+  defp broadcast_change({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(PhxBlog.PubSub, @topic, {__MODULE__, event, result})
+
+    {:ok, result}
   end
 end

@@ -1,0 +1,71 @@
+<article class="border w-2/4 mx-auto border-gray-400 rounded-lg md:p-4 bg-white sm:py-3 py-4 px-2 m-10">
+  <div role="presentation">
+      <div>
+        <div class="m-2">
+          <div class="flex items-center">
+              <div class="mr-2">
+                <div>
+                  <img class="rounded-full w-8" src="https://ui-avatars.com/api/?name=<%= author_name(@post.user) %>" alt="avatar" loading="lazy">
+                </div>
+              </div>
+              <div>
+                <p>
+                  <div class="text text-gray-700 text-sm hover:text-black"><%= author_name(@post.user) %></div>
+                </p>
+                <div class="text-xs text-gray-600 hover:text-black">
+                  <time datetime="2019-08-02T13:58:42.196Z"><%= format_date(@post.inserted_at) %></time>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="p-2">
+          <h2 class="text-2xl font-bold mb-2 hover:text-blue-600 leading-7">
+            <%= @post.title %>
+          </h2>
+          <div class="mb-1 leading-6"><%= @post.body %></div>
+          <div class="flex justify-between items-center">
+              <div class="flex">
+                <div class="py-1 pl-1 pr-2 text-gray-600 text-sm">
+                    <svg class="inline fill-current" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18.884 12.595l.01.011L12 19.5l-6.894-6.894.01-.01A4.875 4.875 0 0112 5.73a4.875 4.875 0 016.884 6.865zM6.431 7.037a3.375 3.375 0 000 4.773L12 17.38l5.569-5.569a3.375 3.375 0 10-4.773-4.773L9.613 10.22l-1.06-1.062 2.371-2.372a3.375 3.375 0 00-4.492.25v.001z"></path>
+                    </svg>
+                    0<span class="hidden md:inline">&nbsp;reactions</span>
+                </div>
+                <div class="py-1 pl-1 pr-2 text-gray-600 text-sm">
+                    <svg class="inline fill-current" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10.5 5h3a6 6 0 110 12v2.625c-3.75-1.5-9-3.75-9-8.625a6 6 0 016-6zM12 15.5h1.5a4.501 4.501 0 001.722-8.657A4.5 4.5 0 0013.5 6.5h-3A4.5 4.5 0 006 11c0 2.707 1.846 4.475 6 6.36V15.5z"></path>
+                    </svg>
+                    <%= Enum.count(@post.comments) %><span class="hidden md:inline">&nbsp;comments</span>
+                </div>
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="antialiased mx-auto max-w-screen-sm">
+    <h3 class="mb-4 text-lg font-semibold text-gray-900">Comments</h3>
+    <div class="space-y-4">
+      <%= for comment <- @post.comments do %>
+        <div class="flex">
+          <div class="flex-shrink-0 mr-3">
+            <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10" src="https://ui-avatars.com/api/?name=<%= author_name(comment.user) %>" alt="">
+          </div>
+          <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+            <strong><%= author_name(comment.user) %></strong> <span class="text-xs text-gray-400"><%= format_date(@post.inserted_at) %></span>
+            <p class="text-sm"><%= comment.content %></p>
+          </div>
+        </div>
+      <% end %>
+      <div>
+        <form action="#" phx-submit="comment">
+          <div>
+            <%= textarea :comment, :content, required: true, placeholder: "Type here...", class: "border h-28 mt-1 px-3 py-2 rounded-lg text-sm w-full" %>
+          </div>
+          <div class="text-right">
+            <%= submit "Comment", phx_disable_with: "Sending...", class: "bg-green-500 hover:bg-green-600 px-3 py-2 rounded text-center text-sm text-white w-24" %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</article>

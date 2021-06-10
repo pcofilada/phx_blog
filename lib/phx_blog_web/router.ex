@@ -21,7 +21,7 @@ defmodule PhxBlogWeb.Router do
     pipe_through :browser
 
     get "/", PostController, :index
-    get "/posts/:id", PostController, :show
+    live "/posts/:id", PostLive, :show
   end
 
   scope "/dashboard", PhxBlogWeb.Dashboard, as: :dashboard do

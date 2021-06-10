@@ -2,7 +2,6 @@ defmodule PhxBlogWeb.PostController do
   use PhxBlogWeb, :controller
 
   alias PhxBlog.Blog
-  alias PhxBlog.Blog.Post
   alias PhxBlog.Blog.Comment
 
   def index(conn, _params) do
