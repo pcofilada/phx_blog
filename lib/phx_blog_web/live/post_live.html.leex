@@ -57,14 +57,18 @@
         </div>
       <% end %>
       <div>
-        <form action="#" phx-submit="comment">
-          <div>
-            <%= textarea :comment, :content, required: true, placeholder: "Type here...", class: "border h-28 mt-1 px-3 py-2 rounded-lg text-sm w-full" %>
-          </div>
-          <div class="text-right">
-            <%= submit "Comment", phx_disable_with: "Sending...", class: "bg-green-500 hover:bg-green-600 px-3 py-2 rounded text-center text-sm text-white w-24" %>
-          </div>
-        </form>
+        <%= if @user do %>
+          <form action="#" phx-submit="comment">
+            <div>
+              <%= textarea :comment, :content, required: true, placeholder: "Type here...", class: "border h-28 mt-1 px-3 py-2 rounded-lg text-sm w-full" %>
+            </div>
+            <div class="text-right">
+              <%= submit "Comment", phx_disable_with: "Sending...", class: "bg-green-500 hover:bg-green-600 px-3 py-2 rounded text-center text-sm text-white w-24" %>
+            </div>
+          </form>
+        <% else %>
+          <%= link "Please login to comment and react.", to: "/users/log_in", class: "block text-center text-gray-600" %>
+        <% end %>
       </div>
     </div>
   </div>
