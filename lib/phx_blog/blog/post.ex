@@ -4,6 +4,7 @@ defmodule PhxBlog.Blog.Post do
 
   alias PhxBlog.Accounts.User
   alias PhxBlog.Blog.Comment
+  alias PhxBlog.Blog.Reaction
 
   @derive {Phoenix.Param, key: :slug}
   schema "posts" do
@@ -14,6 +15,7 @@ defmodule PhxBlog.Blog.Post do
     belongs_to :user, User
 
     has_many :comments, Comment
+    has_many :reactions, Reaction
 
     timestamps()
   end

@@ -7,6 +7,7 @@ defmodule PhxBlog.Blog do
   alias PhxBlog.Repo
 
   alias PhxBlog.Blog.Post
+  alias PhxBlog.Blog.Reaction
 
   @topic inspect(__MODULE__)
 
@@ -28,7 +29,7 @@ defmodule PhxBlog.Blog do
     |> where(user_id: ^user_id)
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:user, :comments])
+    |> Repo.preload([:user, :comments, :reactions])
   end
 
   @doc """
@@ -38,10 +39,10 @@ defmodule PhxBlog.Blog do
 
   ## Examples
 
-      iex> get_post!("hello-world")
+      iex> get_user_post!(1, "hello-world")
       %Post{}
 
-      iex> get_post!("error")
+      iex> get_user_post!(1, "error")
       ** (Ecto.NoResultsError)
   """
   def get_user_post!(user_id, slug) do
@@ -114,7 +115,7 @@ defmodule PhxBlog.Blog do
     Post
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:user, :comments])
+    |> Repo.preload([:user, :comments, :reactions])
   end
 
 @doc """
@@ -124,17 +125,17 @@ defmodule PhxBlog.Blog do
 
   ## Examples
 
-      iex> get_post!(123)
+      iex> get_post!("hello-world")
       %Post{}
 
-      iex> get_post!(456)
+      iex> get_post!("hello")
       ** (Ecto.NoResultsError)
 
   """
   def get_post!(slug) do
     Post
     |> Repo.get_by!(slug: slug)
-    |> Repo.preload([:user])
+    |> Repo.preload([:user, :reactions])
     |> Repo.preload([comments: :user])
   end
 
@@ -183,6 +184,60 @@ defmodule PhxBlog.Blog do
   """
   def change_comment(%Comment{} = comment, attrs \\ %{}) do
     Comment.changeset(comment, attrs)
+  end
+
+  @doc """
+  Gets user reaction for a post.
+
+  Raises `Ecto.NoResultsError` if the Reaction does not exist.
+
+  ## Examples
+
+      iex> get_user_reaction!(1, "hello-world")
+      %Reaction{}
+
+      iex> get_get_user_reactionpost!(1, "error")
+      ** (Ecto.NoResultsError)
+  """
+  def get_user_reaction!(user_id, post_id) do
+    Reaction
+    |> Repo.get_by(user_id: user_id, post_id: post_id)
+  end
+
+  @doc """
+  Creates a reaction.
+
+  ## Examples
+
+      iex> create_reaction(%{field: value})
+      {:ok, %Reaction{}}
+
+      iex> create_reaction(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_reaction(attrs \\ %{}) do
+    %Reaction{}
+    |> Reaction.changeset(attrs)
+    |> Repo.insert()
+    |> broadcast_change([:reaction, :created])
+  end
+
+  @doc """
+  Deletes a reaction.
+
+  ## Examples
+
+      iex> delete_reaction(reaction)
+      {:ok, %Reaction{}}
+
+      iex> delete_reaction(reaction)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_reaction(%Reaction{} = reaction) do
+    Repo.delete(reaction)
+    |> broadcast_change([:reaction, :deleted])
   end
 
   defp broadcast_change({:ok, result}, event) do

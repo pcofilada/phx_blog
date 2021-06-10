@@ -10,13 +10,24 @@ defmodule PhxBlogWeb.PostLive do
     Blog.subscribe()
     post = Blog.get_post!(id)
     user = if session["user_token"], do: Accounts.get_user_by_session_token(session["user_token"]), else: nil
+    reaction = if user, do: Blog.get_user_reaction!(user.id, post.id)
 
-    {:ok, assign(socket, post: post, user: user)}
+    {:ok, assign(socket, post: post, user: user, reaction: reaction)}
   end
 
   def handle_event("comment", %{"comment" => comment}, socket) do
     comment_params = Map.merge(comment, %{"user_id" => socket.assigns.user.id, "post_id" => socket.assigns.post.id})
     Blog.create_comment(comment_params)
+
+    {:noreply, fetch(socket)}
+  end
+
+  def handle_event("react", _params, socket) do
+    user_id = socket.assigns.user.id
+    post_id = socket.assigns.post.id
+    reaction = socket.assigns.reaction
+
+    if reaction, do: Blog.delete_reaction(reaction), else: Blog.create_reaction(%{user_id: user_id, post_id: post_id})
 
     {:noreply, fetch(socket)}
   end

@@ -4,6 +4,7 @@ defmodule PhxBlog.Accounts.User do
 
   alias PhxBlog.Blog.Post
   alias PhxBlog.Blog.Comment
+  alias PhxBlog.Blog.Reaction
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -16,6 +17,7 @@ defmodule PhxBlog.Accounts.User do
 
     has_many :posts, Post
     has_many :comments, Comment
+    has_many :reactions, Reaction
 
     timestamps()
   end
