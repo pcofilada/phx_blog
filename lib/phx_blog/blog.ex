@@ -174,6 +174,45 @@ defmodule PhxBlog.Blog do
   end
 
   @doc """
+  Updates a user comment.
+
+  ## Examples
+
+      iex> update_user_comment("1", %{field: new_value})
+      {:ok, %Comment{}}
+
+      iex> update_user_comment("1", %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_comment(user_id, %{"content" => content, "id" => id}) do
+    Comment
+    |> Repo.get_by!(user_id: user_id, id: id)
+    |> Comment.changeset(%{"content" => content})
+    |> Repo.update()
+    |> broadcast_change([:comment, :updated])
+  end
+
+  @doc """
+  Deletes a user comment.
+
+  ## Examples
+
+      iex> delete_user_comment(comment)
+      {:ok, %Comment{}}
+
+      iex> delete_user_comment(comment)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_user_comment(user_id, id) do
+    Comment
+    |> Repo.get_by!(user_id: user_id, id: id)
+    |> Repo.delete()
+    |> broadcast_change([:comment, :deleted])
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking comment changes.
 
   ## Examples

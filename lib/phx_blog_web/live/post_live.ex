@@ -15,9 +15,23 @@ defmodule PhxBlogWeb.PostLive do
     {:ok, assign(socket, post: post, user: user, reaction: reaction)}
   end
 
-  def handle_event("comment", %{"comment" => comment}, socket) do
+  def handle_event("create_comment", %{"comment" => comment}, socket) do
     comment_params = Map.merge(comment, %{"user_id" => socket.assigns.user.id, "post_id" => socket.assigns.post.id})
     Blog.create_comment(comment_params)
+
+    {:noreply, fetch(socket)}
+  end
+
+  def handle_event("update_comment", %{"comment" => comment}, socket) do
+    user_id = socket.assigns.user.id
+    Blog.update_user_comment(user_id, comment)
+
+    {:noreply, fetch(socket)}
+  end
+
+  def handle_event("delete_comment", %{"id" => id}, socket) do
+    user_id = socket.assigns.user.id
+    Blog.delete_user_comment(user_id, id)
 
     {:noreply, fetch(socket)}
   end

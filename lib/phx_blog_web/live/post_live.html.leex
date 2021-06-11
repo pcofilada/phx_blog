@@ -50,15 +50,28 @@
           <div class="flex-shrink-0 mr-3">
             <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10" src="https://ui-avatars.com/api/?name=<%= author_name(comment.user) %>" alt="">
           </div>
-          <div class="flex-1 border rounded-lg px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
+          <div class="border flex-1 leading-relaxed px-4 py-2 rounded-lg sm:px-6 sm:py-4">
             <strong><%= author_name(comment.user) %></strong> <span class="text-xs text-gray-400"><%= format_date(@post.inserted_at) %></span>
-            <p class="text-sm"><%= comment.content %></p>
+            <%= if @user && @user.id === comment.user_id do %>
+              <form action="#" phx-submit="update_comment">
+                <%= hidden_input :comment, :id, value: comment.id %>
+                <div>
+                  <%= textarea :comment, :content, value: comment.content, required: true, placeholder: "Type here...", class: "border mt-1 px-3 py-2 rounded-lg text-sm w-full" %>
+                </div>
+                <div class="text-right">
+                  <button class="bg-red-500 hover:bg-red-600 px-1 py-0.5 rounded text-center text-white text-xs" phx-click="delete_comment" phx-value-id="<%= comment.id %>">Delete</button>
+                  <%= submit "Update", phx_disable_with: "Updating...", class: "bg-green-500 hover:bg-green-600 px-1 py-0.5 rounded text-center text-white text-xs" %>
+                </div>
+              </form>
+            <% else %>
+              <p class="text-sm"><%= comment.content %></p>
+            <% end %>
           </div>
         </div>
       <% end %>
       <div>
         <%= if @user do %>
-          <form action="#" phx-submit="comment">
+          <form action="#" phx-submit="create_comment">
             <div>
               <%= textarea :comment, :content, required: true, placeholder: "Type here...", class: "border h-28 mt-1 px-3 py-2 rounded-lg text-sm w-full" %>
             </div>
