@@ -5,6 +5,7 @@ defmodule PhxBlogWeb.PostLive do
   alias PhxBlog.Blog
   alias PhxBlog.Blog.Post
   alias PhxBlog.Blog.Comment
+  alias PhxBlog.Blog.CommentReaction
 
   def mount(%{"id" => id}, session, socket) do
     Blog.subscribe()
@@ -42,6 +43,15 @@ defmodule PhxBlogWeb.PostLive do
     reaction = socket.assigns.reaction
 
     if reaction, do: Blog.delete_reaction(reaction), else: Blog.create_reaction(%{user_id: user_id, post_id: post_id})
+
+    {:noreply, fetch(socket)}
+  end
+
+  def handle_event("comment_react", %{"id" => id}, socket) do
+    user_id = socket.assigns.user.id
+    comment_reaction = Blog.get_user_comment_reaction!(user_id, id)
+
+    if comment_reaction, do: Blog.delete_comment_reaction(comment_reaction), else: Blog.create_comment_reaction(%{user_id: user_id, comment_id: id})
 
     {:noreply, fetch(socket)}
   end

@@ -4,12 +4,15 @@ defmodule PhxBlog.Blog.Comment do
 
   alias PhxBlog.Accounts.User
   alias PhxBlog.Blog.Post
+  alias PhxBlog.Blog.CommentReaction
 
   schema "comments" do
     field :content, :string
 
     belongs_to :user, User
     belongs_to :post, Post
+
+    has_many :comment_reactions, CommentReaction
 
     timestamps()
   end

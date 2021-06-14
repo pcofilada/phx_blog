@@ -50,7 +50,7 @@
           <div class="flex-shrink-0 mr-3">
             <img class="mt-2 rounded-full w-8 h-8 sm:w-10 sm:h-10" src="https://ui-avatars.com/api/?name=<%= author_name(comment.user) %>" alt="">
           </div>
-          <div class="border flex-1 leading-relaxed px-4 py-2 rounded-lg sm:px-6 sm:py-4">
+          <div class="border flex-1 leading-relaxed px-4 py-2 rounded-lg sm:px-6 sm:py-4 relative">
             <strong><%= author_name(comment.user) %></strong> <span class="text-xs text-gray-400"><%= format_date(@post.inserted_at) %></span>
             <%= if @user && @user.id === comment.user_id do %>
               <form action="#" phx-submit="update_comment">
@@ -66,6 +66,12 @@
             <% else %>
               <p class="text-sm"><%= comment.content %></p>
             <% end %>
+            <div class="absolute cursor-pointer p-1 right-0 text-gray-600 text-sm top-0 <%= if(Enum.member?(Enum.map(comment.comment_reactions, &Map.take(&1, [:user_id])), %{user_id: @user.id}), do: 'text-green-600', else: 'text-gray-600') %>" phx-click="comment_react" phx-value-id="<%= comment.id %>">
+              <svg class="inline fill-current" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.884 12.595l.01.011L12 19.5l-6.894-6.894.01-.01A4.875 4.875 0 0112 5.73a4.875 4.875 0 016.884 6.865zM6.431 7.037a3.375 3.375 0 000 4.773L12 17.38l5.569-5.569a3.375 3.375 0 10-4.773-4.773L9.613 10.22l-1.06-1.062 2.371-2.372a3.375 3.375 0 00-4.492.25v.001z"></path>
+              </svg>
+              <%= Enum.count(comment.comment_reactions) %><span class="hidden md:inline">&nbsp;reactions</span>
+            </div>
           </div>
         </div>
       <% end %>

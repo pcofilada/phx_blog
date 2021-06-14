@@ -8,6 +8,7 @@ defmodule PhxBlog.Blog do
 
   alias PhxBlog.Blog.Post
   alias PhxBlog.Blog.Reaction
+  alias PhxBlog.Blog.CommentReaction
 
   @topic inspect(__MODULE__)
 
@@ -137,6 +138,7 @@ defmodule PhxBlog.Blog do
     |> Repo.get_by!(slug: slug)
     |> Repo.preload([:user, :reactions])
     |> Repo.preload([comments: :user])
+    |> Repo.preload([comments: :comment_reactions])
   end
 
   @doc """
@@ -277,6 +279,60 @@ defmodule PhxBlog.Blog do
   def delete_reaction(%Reaction{} = reaction) do
     Repo.delete(reaction)
     |> broadcast_change([:reaction, :deleted])
+  end
+
+  @doc """
+  Gets user reaction for a comment.
+
+  Raises `Ecto.NoResultsError` if the Reaction does not exist.
+
+  ## Examples
+
+      iex> get_user_comment_reaction!(1, 1)
+      %CommentReaction{}
+
+      iex> get_user_comment_reaction!(1, 0)
+      ** (Ecto.NoResultsError)
+  """
+  def get_user_comment_reaction!(user_id, comment_id) do
+    CommentReaction
+    |> Repo.get_by(user_id: user_id, comment_id: comment_id)
+  end
+
+  @doc """
+  Creates a commen_reaction.
+
+  ## Examples
+
+      iex> create_commen_reaction(%{field: value})
+      {:ok, %CommentReaction{}}
+
+      iex> create_commen_reaction(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_comment_reaction(attrs \\ %{}) do
+    %CommentReaction{}
+    |> CommentReaction.changeset(attrs)
+    |> Repo.insert()
+    |> broadcast_change([:comment_reaction, :created])
+  end
+
+  @doc """
+  Deletes a commen_reaction.
+
+  ## Examples
+
+      iex> delete_comment_reaction(commen_reaction)
+      {:ok, %CommentReaction{}}
+
+      iex> delete_comment_reaction(commen_reaction)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_comment_reaction(%CommentReaction{} = comment_reaction) do
+    Repo.delete(comment_reaction)
+    |> broadcast_change([:comment_reaction, :deleted])
   end
 
   defp broadcast_change({:ok, result}, event) do
