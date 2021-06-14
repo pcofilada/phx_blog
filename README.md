@@ -1,20 +1,17 @@
 # PhxBlog
 
-To start your Phoenix server:
+### Getting Started
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `npm install` inside the `assets` directory
-  * Start Phoenix endpoint with `mix phx.server`
+```
+  git clone git@github.com:pcofilada/phx_blog.git
+  cd phx_blog
+  cp .env.sample .env
+  docker-compose up --build
+  // Open new terminal and go to phx_blog folder
+  docker-compose run --rm app mix ecto.migrate
+  Visit http://localhost:4000/
+```
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+### System Dependecies
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+- [Docker](https://www.docker.com/)
